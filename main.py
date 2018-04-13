@@ -77,7 +77,7 @@ def main():
     I wasn't 100% sure data was to be exported, so I'm just doing the merged data set
     that's the insight / mapping data joined by product code to get product name etc
     '''
-    helper.write_data_frame(data_frame=merged_data, file_name='merged_data.csv')
+    helper.write_data_frame(data_frame=merged_data, file_name='datanew.csv')
 
 # when this is called on own, invoke main
 if __name__ == "__main__":
