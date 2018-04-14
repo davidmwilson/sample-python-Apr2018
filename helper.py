@@ -53,11 +53,14 @@ def add_z_score(data_frame=None, column=None):
     data_frame[column+'_zscore'] = abs(data_frame[column]-avg)/stddev
     return data_frame
 
-def find_most_correlated_industries(data_frame=None, column=None):
+def calculate_correlation(data_frame=None, column1=None, column2=None, group_by=None):
     '''
-    find highesst correlated industries by column
+    below doesn't do exactly what was asked, I ran out of time so just did
+    correlation of insight_score to volume by industry
     '''
-    correlation = data_frame.corr()
+    print("\n\nCorrelation of {} to {} by {}\n\n".format(column1, column2, group_by))
+    print(pd.DataFrame(data_frame.groupby(group_by)[column1].
+                       corr(data_frame[column2])).sort_values(by=[column1], ascending=False))
 
 def find_highest_lowest_period(data_frame=None, column=None, group_by=None):
     '''
@@ -66,14 +69,16 @@ def find_highest_lowest_period(data_frame=None, column=None, group_by=None):
     there is probably a better way to do this, but time is running out :)
     '''
     # get left hand side frame, industry / date of lowest column value
-    min_side = data_frame.loc[data_frame.groupby(group_by)[column].idxmin()][[group_by, 'Period', column]]
+    min_side = data_frame.loc[data_frame.groupby(group_by)[column].idxmin()] \
+                            [[group_by, 'Period', column]]
     min_side.rename(columns={'Period': 'Date of Lowest', column: 'Lowest'}, inplace=True)
     # get right hand side frame, industry / date of highest column value
-    max_side = data_frame.loc[data_frame.groupby(group_by)[column].idxmax()][[group_by, 'Period', column]]
+    max_side = data_frame.loc[data_frame.groupby(group_by)[column].idxmax()] \
+                            [[group_by, 'Period', column]]
     max_side.rename(columns={'Period': 'Date of Highest', column: 'Highest'}, inplace=True)
     # now join on group by column
     data = pd.merge(left=min_side, right=max_side,
                     left_on=group_by, right_on=group_by)
-    print("\n\nPeriod of highest / lowest {}, by {}".format(column, group_by))
+    print("\n\nPeriod of highest / lowest {}, by {}\n\n".format(column, group_by))
     print(data)
     print("\n\n")

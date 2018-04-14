@@ -70,8 +70,10 @@ def main():
                                       column='Insight_Score', group_by='Industry')
 
     '''
-    show date of lowest insight_score per industry
+    look for correlation
     '''
+    helper.calculate_correlation(data_frame=merged_data,
+                                 column1='Insight_Score', column2='Volume', group_by='Industry')
 
     '''
     I wasn't 100% sure data was to be exported, so I'm just doing the merged data set
